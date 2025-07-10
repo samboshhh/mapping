@@ -39,7 +39,7 @@ if group_selected:
     group_df.groupby("report categories", as_index=False)
     .agg(total_spend=("amount", lambda x: x.abs().sum()))
     .sort_values(by="total_spend", ascending=False)
-)
+
 )
     )
 
