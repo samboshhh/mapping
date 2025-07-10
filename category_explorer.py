@@ -33,20 +33,25 @@ st.title("📊 Category Explorer")
 st.subheader("📦 Spend Treemap")
 group_selected = st.selectbox("Select Transaction Group", sorted(df["transaction group"].dropna().unique()))
 
-df_grouped = (
-    df[df["transaction group"] == group_selected]
-    .groupby(["report categories"], as_index=False)
-    .agg(total_spend=("amount", "sum"))
-    .sort_values(by="total_spend", ascending=False)
-)
+if group_selected:
+    group_df = df[df["transaction group"] == group_selected]
+    report_spend = (
+        group_df.groupby("report categories", as_index=False)
+        .agg(total_spend=("amount", "sum"))
+        .query("total_spend > 0")
+        .sort_values(by="total_spend", ascending=False)
+    )
 
-fig = px.treemap(
-    df_grouped,
-    path=["report categories"],
-    values="total_spend",
-    title=f"Spend Breakdown for '{group_selected}'",
-)
-st.plotly_chart(fig, use_container_width=True)
+    if not report_spend.empty:
+        fig = px.treemap(
+            report_spend,
+            path=["report categories"],
+            values="total_spend",
+            title=f"Spend Breakdown for '{group_selected}'"
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("No spend data available for this Transaction Group.")
 
 # --- Full Hierarchy Table ---
 st.subheader("📋 Transaction Group > Report Category > Enrichment Category")
