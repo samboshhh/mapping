@@ -40,7 +40,6 @@ if group_selected:
     .agg(total_spend=("amount", lambda x: x.abs().sum()))
     .sort_values(by="total_spend", ascending=False)
 
-)
     )
 
     if not report_spend.empty:
