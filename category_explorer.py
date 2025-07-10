@@ -35,12 +35,12 @@ group_selected = st.selectbox("Select Transaction Group", sorted(df["transaction
 
 if group_selected:
     group_df = df[df["transaction group"] == group_selected]
-   report_spend = (
+ report_spend = (
     group_df.groupby("report categories", as_index=False)
     .agg(total_spend=("amount", lambda x: x.abs().sum()))
     .sort_values(by="total_spend", ascending=False)
+)
 
-    )
 
     if not report_spend.empty:
         fig = px.treemap(
