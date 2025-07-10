@@ -95,7 +95,7 @@ else:
             avg_txn=('amount', 'mean')
         )
         .sort_values(by='txn_count', ascending=False)
-        .head(10)
+        .head(25)
     )
     st.markdown(f"### 🧾 Top Merchants for '{ec}'")
     st.dataframe(top_merchants.style.format({
